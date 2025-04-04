@@ -1,4 +1,4 @@
-import { Conversation } from './llm-utils'
+import { Conversation } from '../src/llm-utils'
 
 const conversation = await Conversation.new()
 

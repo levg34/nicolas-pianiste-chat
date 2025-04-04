@@ -13,7 +13,7 @@ export class Conversation {
     }
 
     static async new(): Promise<Conversation> {
-        const prompt = Bun.file('./system-prompt.md')
+        const prompt = Bun.file('./server/data/system-prompt.md')
         const systemPrompt = await prompt.text()
         return new Conversation(systemPrompt)
     }
