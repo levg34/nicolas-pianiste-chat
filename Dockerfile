@@ -1,20 +1,12 @@
-FROM oven/bun:1.0-slim AS builder
+FROM oven/bun:1 AS builder
 
 WORKDIR /app
-COPY package.json bun.lockb ./
+COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
-COPY client ./client
 COPY server ./server
 
-RUN bun build \
-  --minify \
-  --splitting \
-  --public-path /assets/ \
-  --outdir client/dist \
-  client/src/index.tsx
-
-FROM oven/bun:1.0-slim
+FROM oven/bun:1
 
 WORKDIR /app
 COPY --from=builder /app .
