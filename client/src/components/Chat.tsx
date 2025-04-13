@@ -1,4 +1,4 @@
-import { createSignal, onMount } from 'solid-js'
+import { createSignal, onMount, onCleanup, createEffect } from 'solid-js'
 import './Chat.css'
 
 interface Message {
@@ -10,43 +10,65 @@ function Chat() {
     const [messages, setMessages] = createSignal<Message[]>([])
     const [newMessage, setNewMessage] = createSignal('')
     const [isLoading, setIsLoading] = createSignal(false)
+    const [socket, setSocket] = createSignal<WebSocket | null>(null)
 
-    const handleSendMessage = async () => {
-        if (newMessage().trim() === '') return
+    onMount(() => {
+        const ws = new WebSocket(import.meta.env.VITE_WEBSOCKET_URL)
+        setSocket(ws)
+
+        ws.onopen = () => {
+            console.log('Connected to WebSocket server')
+            const initialMessage: Message = { role: 'assistant', content: 'Hello, how can I help you?' }
+            setMessages([initialMessage])
+        }
+
+        ws.onmessage = (event) => {
+            const message = event.data
+            console.log('Received message:', message)
+            const assistantMessage: Message = { role: 'assistant', content: message }
+            setMessages((prev) => [...prev, assistantMessage])
+            setIsLoading(false)
+        }
+
+        ws.onerror = (error) => {
+            console.error('WebSocket error:', error)
+            const errorMessage: Message = { role: 'assistant', content: 'Error connecting to server' }
+            setMessages((prev) => [...prev, errorMessage])
+            setIsLoading(false)
+        }
+
+        ws.onclose = () => {
+            console.log('Disconnected from WebSocket server')
+            setSocket(null)
+        }
+    })
+
+    onCleanup(() => {
+        if (socket()) {
+            socket()!.close()
+        }
+    })
+
+    const handleSendMessage = () => {
+        if (newMessage().trim() === '' || !socket()) return
 
         const userMessage: Message = { role: 'user', content: newMessage() }
-        setMessages([...messages(), userMessage])
+        setMessages((prev) => [...prev, userMessage])
         setNewMessage('')
         setIsLoading(true)
 
-        try {
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ messages: [...messages(), userMessage] })
-            })
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok')
-            }
-
-            const data = await response.json()
-            const assistantMessage: Message = { role: 'assistant', content: data.message }
-            setMessages([...messages(), assistantMessage])
-        } catch (error) {
-            console.error('Error sending message:', error)
-            const errorMessage: Message = { role: 'assistant', content: 'Error sending message' }
-            setMessages([...messages(), errorMessage])
-        } finally {
-            setIsLoading(false)
-        }
+        socket()!.send(JSON.stringify({ message: userMessage.content }))
     }
 
-    onMount(() => {
-        const initialMessage: Message = { role: 'assistant', content: 'Hello, how can I help you?' }
-        setMessages([initialMessage])
+    createEffect(() => {
+        if (isLoading()) {
+            const loadingMessage: Message = { role: 'assistant', content: 'Loading...' }
+            if (!messages().some((m) => m.content === 'Loading...')) {
+                setMessages((prev) => [...prev, loadingMessage])
+            }
+        } else {
+            setMessages((prev) => prev.filter((m) => m.content !== 'Loading...'))
+        }
     })
 
     return (
@@ -55,7 +77,6 @@ function Chat() {
                 {messages().map((message) => (
                     <div class={`message ${message.role}`}>{message.content}</div>
                 ))}
-                {isLoading() && <div class="message assistant">Loading...</div>}
             </div>
             <div class="chat-input">
                 <input
