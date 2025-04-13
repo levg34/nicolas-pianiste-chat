@@ -13,13 +13,13 @@ function Chat() {
     const [socket, setSocket] = createSignal<WebSocket | null>(null)
 
     onMount(() => {
-        const ws = new WebSocket(import.meta.env.VITE_WEBSOCKET_URL)
+        const ws = new WebSocket(import.meta.env.VITE_WEBSOCKET_URL ?? 'wss://'+new URL(location.href).hostname)
         setSocket(ws)
 
         ws.onopen = () => {
             console.log('Connected to WebSocket server')
-            const initialMessage: Message = { role: 'assistant', content: 'Hello, how can I help you?' }
-            setMessages([initialMessage])
+            // const initialMessage: Message = { role: 'assistant', content: 'Hello, how can I help you?' }
+            // setMessages([initialMessage])
         }
 
         ws.onmessage = (event) => {
