@@ -1,4 +1,5 @@
 import { serve } from 'bun'
+import { existsSync } from 'fs'
 import { Conversation } from './llm-utils'
 
 // Map to store conversations for each WebSocket client.
@@ -7,6 +8,16 @@ const conversations = new Map<Bun.ServerWebSocket<unknown>, Promise<Conversation
 serve({
     port: process.env.PORT || 3000,
     fetch(req, server) {
+        const url = new URL(req.url)
+        if (url.pathname === '/chat') {
+            const filePath = './client/dist/index.html'
+            if (existsSync(filePath)) {
+                const file = Bun.file(filePath)
+                return new Response(file)
+            } else {
+                return new Response('Client not found', { status: 404 })
+            }
+        }
         if (server.upgrade(req)) {
             return
         }
