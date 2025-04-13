@@ -13,7 +13,7 @@ function Chat() {
     const [socket, setSocket] = createSignal<WebSocket | null>(null)
 
     onMount(() => {
-        const ws = new WebSocket(import.meta.env.VITE_WEBSOCKET_URL ?? 'wss://'+new URL(location.href).hostname)
+        const ws = new WebSocket(import.meta.env.VITE_WEBSOCKET_URL ?? 'wss://' + new URL(location.href).hostname)
         setSocket(ws)
 
         ws.onopen = () => {
@@ -57,7 +57,7 @@ function Chat() {
         setNewMessage('')
         setIsLoading(true)
 
-        socket()!.send(JSON.stringify({ message: userMessage.content }))
+        socket()!.send(userMessage.content)
     }
 
     createEffect(() => {
