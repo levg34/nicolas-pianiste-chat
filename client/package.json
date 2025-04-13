@@ -9,8 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "linkify-element": "^4.2.0",
-    "linkifyjs": "^4.2.0",
     "solid-js": "^1.9.5"
   },
   "devDependencies": {
