@@ -5,6 +5,9 @@ COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
 COPY server ./server
+COPY client ./client
+
+RUN cd client && bun run build
 
 FROM oven/bun:1
 
