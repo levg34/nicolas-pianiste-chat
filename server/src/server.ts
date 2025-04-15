@@ -5,7 +5,7 @@ import { Conversation } from './llm-utils'
 // Map to store conversations for each WebSocket client.
 const conversations = new Map<Bun.ServerWebSocket<unknown>, Promise<Conversation>>()
 
-serve({
+const server = serve({
     port: process.env.PORT || 3000,
     fetch(req, server) {
         const url = new URL(req.url)
@@ -80,3 +80,5 @@ serve({
         }
     }
 })
+
+console.info('Server listening on ' + server.url)

@@ -1,18 +1,20 @@
 {
-  "name": "nicolas-pianiste-chat",
-  "module": "index.ts",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "server": "bun run server/src/server.ts"
-  },
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "dependencies": {
-    "openai": "^4.91.1"
-  }
+    "name": "nicolas-pianiste-chat",
+    "module": "index.ts",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "server": "bun run server/src/server.ts"
+    },
+    "devDependencies": {
+        "@types/bun": "latest",
+        "@types/ejs": "^3.1.5"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    },
+    "dependencies": {
+        "ejs": "^3.1.10",
+        "openai": "^4.91.1"
+    }
 }

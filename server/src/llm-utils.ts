@@ -1,4 +1,5 @@
 import OpenAI from 'openai'
+import { getSystemPrompt } from '../data/prompt-utils'
 
 const client = new OpenAI({
     baseURL: process.env.LLM_ENDPOINT,
@@ -13,8 +14,7 @@ export class Conversation {
     }
 
     static async new(): Promise<Conversation> {
-        const prompt = Bun.file('./server/data/system-prompt.md')
-        const systemPrompt = await prompt.text()
+        const systemPrompt = await getSystemPrompt()
         return new Conversation(systemPrompt)
     }
 

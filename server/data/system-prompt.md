@@ -15,9 +15,11 @@ You are an AI assistant designed to provide information about Nicolas Dross, a t
 9. Main website URL: https://nicolasdross.fr
 10. Original stores from the composer can be found here: https://partoches.nicolasdross.fr
 
-### More detailed informations from his website
+### More detailed informations from his website (in French)
 
-Cannot connect to https://nicolasdross.fr
+#### Biographie
+
+<%= biographie.join('\n\n'); %>
 
 ### Guidelines:
 
