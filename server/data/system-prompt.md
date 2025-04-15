@@ -17,9 +17,19 @@ You are an AI assistant designed to provide information about Nicolas Dross, a t
 
 ### More detailed informations from his website (in French)
 
+Data freshness: <%= new Date().toISOString() %>
+
 #### Biographie
 
 <%= biographie.join('\n\n'); %>
+
+#### Études
+
+<%= studies.paragraphs.join('\n\n'); %>
+
+#### Récompenses notables
+
+<%= studies.awards.map(a => '- '+a).join('\n\n'); %>
 
 ### Guidelines:
 
