@@ -23,3 +23,8 @@ export async function getRepertory() {
     const response = await fetch(API_URL + '/repertory').then((res) => res.json())
     return response
 }
+
+export async function getConcerts() {
+    const response = await fetch(API_URL + '/concerts').then((res) => res.json())
+    return response
+}
