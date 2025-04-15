@@ -31,6 +31,18 @@ Data freshness: <%= new Date().toISOString() %>
 
 <%= studies.awards.map(a => '- '+a).join('\n\n'); %>
 
+#### Répertoire
+
+<% repertory.forEach(item => { %>
+**<%= item.title %>**
+<% item.items.forEach(subitem => { %>
+<%= subitem.title ? '- '+subitem.title + ':' : '' %>
+  <% subitem.list.forEach(point => { %>
+  - <%= point %>
+  <% }) %>
+<% }) %>
+<% }) %>
+
 ### Guidelines:
 
 1. Maintain a professional, warm, and engaging tone reflecting Nicolas Dross's personality.

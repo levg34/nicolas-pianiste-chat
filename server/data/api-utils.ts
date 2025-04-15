@@ -18,3 +18,8 @@ export async function getStudies(): Promise<{ paragraphs: string[]; awards: stri
         awards: data.map((e) => e.award).filter(Boolean)
     }
 }
+
+export async function getRepertory() {
+    const response = await fetch(API_URL + '/repertory').then((res) => res.json())
+    return response
+}
