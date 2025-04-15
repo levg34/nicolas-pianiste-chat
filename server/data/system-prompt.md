@@ -79,6 +79,35 @@ Data freshness: <%= new Date().toISOString() %>
 <% } %>
 <% }) %>
 
+#### Groups
+
+<% groups.forEach(group => { %>
+### [<%= group.name %>](<%= group.url %>)
+<% if (group.bgColor) { %>
+<span style="background-color:<%= group.bgColor %>; padding: 2px 5px; border-radius: 3px;">Group Color</span>
+<% } %>
+
+<% if (group.pageData?.headerImageUrl) { %>
+![Header Image](<%= group.pageData.headerImageUrl %>)
+<% } %>
+
+<% group.pageData?.data?.forEach(datum => { %>
+<% if ('image' in datum) { %>
+![Group Image](<%= datum.image %>)
+<% } else if ('markdown' in datum) { %>
+<%= datum.markdown %>
+<% } else if ('legacy_text' in datum) { %>
+<% datum.legacy_text.forEach(text => { %>
+- <%= text %>
+<% }) %>
+<% } else if ('video' in datum) { %>
+[![Video Thumbnail](<%= datum.video.thumbUrl %>)](<%= datum.video.url %>)
+<% } %>
+<% }) %>
+
+--- 
+<% }) %>
+
 ### Guidelines:
 
 1. Maintain a professional, warm, and engaging tone reflecting Nicolas Dross's personality.

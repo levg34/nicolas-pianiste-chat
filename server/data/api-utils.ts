@@ -28,3 +28,8 @@ export async function getConcerts() {
     const response = await fetch(API_URL + '/concerts').then((res) => res.json())
     return response
 }
+
+export async function getGroups() {
+    const response = await fetch(API_URL + '/pages?full=true').then((res) => res.json())
+    return response
+}
