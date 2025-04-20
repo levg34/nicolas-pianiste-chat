@@ -46,36 +46,34 @@ Data freshness: <%= new Date().toISOString() %>
 #### Concerts
 
 <% concerts.forEach(concert => { %>
-<% if (concert.date) { /* ConcertOccurence */ %>
-**<%= new Date(concert.date).toLocaleDateString() %>** <%= concert.time ? `• ${concert.time}` : '' %>
-- **Location:** <%= concert.city %>, <%= concert.place %>
-<% if (concert.info) { %>
-  - <%= concert.info.replace(/\n/g, '\n  - ') %>
-<% } %>
-<% if (concert.irUrl) { %>
-  - [More info](<%= concert.irUrl %>)
-<% } %>
-
-<% } else { /* ConcertDefinition */ %>
+<% if (!concert.date) { /* Only ConcertDefinition, skip occurrences */ %>
 ### <%= concert.name %> (<%= concert.type %>)
-<% if (concert.img) { %>
-![<%= concert.name %>](<%= concert.img %>)
-<% } %>
 
+- **Location:** <%= concert.city %>, <%= concert.place %>
+
+<% if (concert.details.artists && concert.details.artists.length) { %>
 **Artists:**
-<% concert.details.artists?.forEach(artist => { %>
+<% concert.details.artists.forEach(artist => { %>
 - <%= artist.instrument %>: <%= artist.name %>
 <% }) %>
+<% } %>
 
+<% if (concert.details.pieces && concert.details.pieces.length) { %>
 **Program:**
-<% concert.details.pieces?.forEach(piece => { %>
+<% concert.details.pieces.forEach(piece => { %>
 - *<%= piece.composer %>*: <%= piece.title %>
 <% }) %>
+<% } %>
 
 <% if (concert.info) { %>
 **Notes:**
 <%= concert.info.replace(/\n/g, '\n\n') %>
 <% } %>
+
+<% if (concert.irUrl) { %>
+[More info](<%= concert.irUrl %>)
+<% } %>
+
 <% } %>
 <% }) %>
 
